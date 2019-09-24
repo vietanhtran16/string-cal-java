@@ -14,7 +14,7 @@ class StringCalculatorTests {
 	void return0ForEmptyString() {
 		StringCalculator calculator = new StringCalculator();
 
-		int result = calculator.sum("");
+		int result = calculator.Add("");
 
 		assertEquals(0, result);
 	}
@@ -28,7 +28,7 @@ class StringCalculatorTests {
 	void returnSumOfTwoNumbers(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
 
-		int result = calculator.sum(input);
+		int result = calculator.Add(input);
 
 		assertEquals(expectedResult, result);
 	}
@@ -41,7 +41,7 @@ class StringCalculatorTests {
 	void returnSumOfAnyNumbers(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
 
-		int result = calculator.sum(input);
+		int result = calculator.Add(input);
 
 		assertEquals(expectedResult, result);
 	}
@@ -50,7 +50,7 @@ class StringCalculatorTests {
 	void handleCommaAndNewLineAsDelimiters() {
 		StringCalculator calculator = new StringCalculator();
 
-		int result = calculator.sum("1\n2,3");
+		int result = calculator.Add("1\n2,3");
 
 		assertEquals(6, result);
 	}
@@ -63,7 +63,7 @@ class StringCalculatorTests {
 	void handleCustomDelimiters(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
 
-		int result = calculator.sum(input);
+		int result = calculator.Add(input);
 
 		assertEquals(expectedResult, result);
 	}
@@ -72,8 +72,17 @@ class StringCalculatorTests {
 	void throwErrorForNegativeNumbers(){
 		StringCalculator calculator = new StringCalculator();
 
-		Error negativeNumberException = assertThrows(Error.class, () -> calculator.sum("-1,2,-3"));
+		Error negativeNumberException = assertThrows(Error.class, () -> calculator.Add("-1,2,-3"));
 
 		assertTrue(negativeNumberException.getMessage().contains("Negative numbers are not allowed: -1, -3"));
+	}
+
+	@Test
+	void ignoreNumberMoreThan1000(){
+		StringCalculator calculator = new StringCalculator();
+
+		int result = calculator.Add("1000,2,3");
+
+		assertEquals(5, result);
 	}
 }

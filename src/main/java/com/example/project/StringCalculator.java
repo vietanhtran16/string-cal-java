@@ -1,12 +1,11 @@
 package com.example.project;
 
 import java.util.Arrays;
-import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 public class StringCalculator {
 
-	public int sum(String input) {
+	public int Add(String input) {
 		if (input.isEmpty()) {
 			return 0;
 		}
@@ -14,7 +13,7 @@ public class StringCalculator {
 		String[] numbers = getNumbers(input);
 		int[] parsedNumbers = parseNumbers(numbers);
 		validateNumbers(parsedNumbers);
-		return IntStream.of(parsedNumbers).sum();
+		return IntStream.of(parsedNumbers).filter(number -> number < 1000).sum();
 	}
 
 	private int[] parseNumbers(String[] numbers) {
@@ -42,10 +41,14 @@ public class StringCalculator {
 
 	private String[] getNumbersWithCustomDelimiter(String input) {
 		String delimiterAndNumberSeparator = "\n";
-		String customDelimitersPrefix = "//";
-		String customDelimiter = input.split(delimiterAndNumberSeparator)[0].replace(customDelimitersPrefix, "");
+		String customDelimiter = getCustomDelimiters(input, delimiterAndNumberSeparator);
 		String numbers = input.split(delimiterAndNumberSeparator)[1];
 		return numbers.split("\\" + customDelimiter);
+	}
+
+	private String getCustomDelimiters(String input, String delimiterAndNumberSeparator) {
+		String customDelimitersPrefix = "//";
+		return input.split(delimiterAndNumberSeparator)[0].replace(customDelimitersPrefix, "");
 	}
 
 	private boolean hasCustomDelimiters(String input) {
