@@ -1,8 +1,9 @@
 package com.example.project;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -52,5 +53,27 @@ class StringCalculatorTests {
 		int result = calculator.sum("1\n2,3");
 
 		assertEquals(6, result);
+	}
+
+	@ParameterizedTest()
+	@CsvSource({
+			"'//;\n1;2', 3",
+			"'//*\n4*2*8', 14",
+	})
+	void handleCustomDelimiters(String input, int expectedResult) {
+		StringCalculator calculator = new StringCalculator();
+
+		int result = calculator.sum(input);
+
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	void throwErrorForNegativeNumbers(){
+		StringCalculator calculator = new StringCalculator();
+
+		Error negativeNumberException = assertThrows(Error.class, () -> calculator.sum("-1,2,-3"));
+
+		assertTrue(negativeNumberException.getMessage().contains("Negative numbers are not allowed: -1, -3"));
 	}
 }
