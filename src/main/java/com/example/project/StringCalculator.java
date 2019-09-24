@@ -1,9 +1,12 @@
 package com.example.project;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class StringCalculator {
+	final Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 
 	public int Add(String input) {
 		if (input.isEmpty()) {
@@ -36,18 +39,31 @@ public class StringCalculator {
 	}
 
 	private String[] getNumbersWithDefaultDelimiters(String input) {
-		return input.split(",|\n");
+		String defaultDelimiters = ",|\n";
+		return input.split(defaultDelimiters);
 	}
 
 	private String[] getNumbersWithCustomDelimiter(String input) {
 		String delimiterAndNumberSeparator = "\n";
 		String customDelimiter = getCustomDelimiters(input, delimiterAndNumberSeparator);
 		String numbers = input.split(delimiterAndNumberSeparator)[1];
-		return numbers.split("\\" + customDelimiter);
+		return numbers.split("\\" + String.join("\\", customDelimiter.split("")));
 	}
 
 	private String getCustomDelimiters(String input, String delimiterAndNumberSeparator) {
 		String customDelimitersPrefix = "//";
+		if(input.startsWith("//["))
+		{
+			Matcher matcher = pattern.matcher(input);
+			String multiCharsDelimiters;
+			while (matcher.find()) {
+				for (int i = 1; i <= matcher.groupCount(); i++) {
+					multiCharsDelimiters = matcher.group(i);
+					return multiCharsDelimiters;
+				}
+			}
+
+		}
 		return input.split(delimiterAndNumberSeparator)[0].replace(customDelimitersPrefix, "");
 	}
 

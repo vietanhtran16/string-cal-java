@@ -60,7 +60,7 @@ class StringCalculatorTests {
 			"'//;\n1;2', 3",
 			"'//*\n4*2*8', 14",
 	})
-	void handleCustomDelimiters(String input, int expectedResult) {
+	void handleCustomDelimitersWithSingleChar(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
 
 		int result = calculator.Add(input);
@@ -84,5 +84,17 @@ class StringCalculatorTests {
 		int result = calculator.Add("1000,2,3");
 
 		assertEquals(5, result);
+	}
+
+	@ParameterizedTest()
+	@CsvSource({
+			"'//[***]\n1***2***3', 6"
+	})
+	void handleCustomDelimitersWithMultiChars(String input, int expectedResult) {
+		StringCalculator calculator = new StringCalculator();
+
+		int result = calculator.Add(input);
+
+		assertEquals(expectedResult, result);
 	}
 }
