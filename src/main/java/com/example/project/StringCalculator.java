@@ -1,6 +1,8 @@
 package com.example.project;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -45,26 +47,26 @@ public class StringCalculator {
 
 	private String[] getNumbersWithCustomDelimiter(String input) {
 		String delimiterAndNumberSeparator = "\n";
-		String customDelimiter = getCustomDelimiters(input, delimiterAndNumberSeparator);
+		String customDelimiters = getCustomDelimiters(input, delimiterAndNumberSeparator);
 		String numbers = input.split(delimiterAndNumberSeparator)[1];
-		return numbers.split("\\" + String.join("\\", customDelimiter.split("")));
+		return numbers.split(customDelimiters);
 	}
 
 	private String getCustomDelimiters(String input, String delimiterAndNumberSeparator) {
-		String customDelimitersPrefix = "//";
 		if(input.startsWith("//["))
 		{
+			StringBuilder delimiters = new StringBuilder();
+			delimiters.append("\\");
 			Matcher matcher = pattern.matcher(input);
-			String multiCharsDelimiters;
 			while (matcher.find()) {
-				for (int i = 1; i <= matcher.groupCount(); i++) {
-					multiCharsDelimiters = matcher.group(i);
-					return multiCharsDelimiters;
-				}
+					delimiters.append(String.join("\\", matcher.group(1).split("")) + "|");
 			}
+			delimiters.deleteCharAt(delimiters.lastIndexOf("|"));
+			return delimiters.toString();
 
 		}
-		return input.split(delimiterAndNumberSeparator)[0].replace(customDelimitersPrefix, "");
+		String singleCharCustomDelimitersPrefix = "//";
+		return "\\" + input.split(delimiterAndNumberSeparator)[0].replace(singleCharCustomDelimitersPrefix, "");
 	}
 
 	private boolean hasCustomDelimiters(String input) {

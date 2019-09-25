@@ -88,9 +88,22 @@ class StringCalculatorTests {
 
 	@ParameterizedTest()
 	@CsvSource({
-			"'//[***]\n1***2***3', 6"
+			"'//[***]\n1***2***3', 6",
+			"'//[?><]\n2?><5?><3', 10"
 	})
-	void handleCustomDelimitersWithMultiChars(String input, int expectedResult) {
+	void handleSingleCustomDelimiterWithMultiChars(String input, int expectedResult) {
+		StringCalculator calculator = new StringCalculator();
+
+		int result = calculator.Add(input);
+
+		assertEquals(expectedResult, result);
+	}
+
+	@ParameterizedTest()
+	@CsvSource({
+			"'//[*][%]\n1*2%3', 6"
+	})
+	void handleMultiCustomDelimitersWithMultiChars(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
 
 		int result = calculator.Add(input);
