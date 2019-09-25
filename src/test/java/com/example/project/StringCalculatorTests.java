@@ -58,7 +58,7 @@ class StringCalculatorTests {
 	@ParameterizedTest()
 	@CsvSource({
 			"'//;\n1;2', 3",
-			"'//*\n4*2*8', 14",
+			"'//*\n4*2*8', 14"
 	})
 	void handleCustomDelimitersWithSingleChar(String input, int expectedResult) {
 		StringCalculator calculator = new StringCalculator();
